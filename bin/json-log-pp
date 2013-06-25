@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'colorize'
+require 'stringio'
+
+STDOUT.sync = true
+
+Signal.trap(2) do
+  Process.exit(0)
+end
+
+while line = STDIN.gets
+  break if line == nil
+
+  json = JSON.parse(line) rescue nil
+
+  if json && json['request']
+
+    out = StringIO.new
+
+    out.puts
+    out.puts "Request: #{json['request']}".cyan
+    out.puts
+    
+    %w{stdout stderr}.each do |b|
+      color = b == 'stdout' ? :green : :yellow
+      log = json[b] || ''
+      if log == '' || log == "\n"
+        out.puts "No #{b}.".send(color)
+      else
+        out.puts "#{b}:".cyan
+        out.puts log.send(color)
+      end
+      # Typically log statements start end with a \n, so skiping puts here.
+    end
+
+    if json['exception']
+      out.puts "Exception: #{json['exception']['message']}".red
+      out.puts json['exception']['backtrace'].map {|e| "  #{e}"}.join("\n").blue
+      out.puts
+    end
+
+    STDOUT.print(out.string)
+
+  else
+    puts line
+  end
+
+end
+
+puts "\nEOF.".red

@@ -1,5 +1,6 @@
 require 'rack-json-logs/version'
 require 'json'
+require 'stringio'
 
 module Rack
 
