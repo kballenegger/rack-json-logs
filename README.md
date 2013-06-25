@@ -1,6 +1,32 @@
-# Rack::Json::Logs
+# Rack::JsonLogs
 
-TODO: Write a gem description
+Rack::JsonLogs is a gem that helps log sanely in production.
+
+Ever request will log a JSON object to the real *stdout*, containing the
+following (note: whitespace added here for clarity, in production it would only
+be a single line, for easier processig through tools like `grep`):
+
+```json
+{
+   "request": "GET /hello",
+   "stdout": "This contains the STDOUT\nLines are separated by \\n",
+   "stderr": "This contains the STDERR\nLines are separated by \\n",
+   "exception": {
+      "message": "Throwing an exception on purpose.",
+      "backtrace": [
+         "config.ru:9:in `block (2 levels) in <main>'",
+         ".../rack-json-logs/lib/rack-json-logs.rb:23:in `call'",
+         ".../rack-json-logs/lib/rack-json-logs.rb:23:in `call'",
+         "etc... you get the idea"
+      ]
+   }
+}
+```
+
+Rack::JsonLogs comes with a command-line tool to which you can pipe the log
+files, which will be pretty-printed for legibility and in color:
+
+    $ tail -F my.log | json-log-pp
 
 ## Installation
 
@@ -18,7 +44,12 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Using Rack::JsonLogs is easy, all you need to do is add it to your middleware
+stack:
+
+```ruby
+use Rack::JsonLogger
+```
 
 ## Contributing
 
