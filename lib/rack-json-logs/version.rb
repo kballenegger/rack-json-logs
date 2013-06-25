@@ -1,7 +1,5 @@
 module Rack
-  module Json
-    module Logs
-      VERSION = "0.0.1"
-    end
+  class JsonLogs
+    VERSION = '0.0.1'
   end
 end
