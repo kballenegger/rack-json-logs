@@ -21,6 +21,7 @@ while line = STDIN.gets
 
     out.puts
     out.puts "Request: #{json['request']}".cyan
+    out.puts "From: #{json['from']}".cyan if json['from']
     out.puts
     
     %w{stdout stderr}.each do |b|
