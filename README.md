@@ -9,6 +9,7 @@ be a single line, for easier processig through tools like `grep`):
 ```json
 {
    "request": "GET /hello",
+   "from": "server-1",
    "stdout": "This contains the STDOUT\nLines are separated by \\n",
    "stderr": "This contains the STDERR\nLines are separated by \\n",
    "exception": {
