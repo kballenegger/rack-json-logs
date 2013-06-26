@@ -1,11 +1,25 @@
 require 'rack-json-logs/version'
 require 'json'
 require 'stringio'
+require 'socket'
 
 module Rack
 
   # JsonLogs is a rack middleware that will buffer output, capture exceptions,
   # and log the entire thing as a json object for each request.
+  #
+  # Options are:
+  #
+  #   :reraise_exceptions
+  #
+  #     Whether to re-raise exceptions, or just respond with a standard JSON
+  #     500 response.
+  #
+  #   :from
+  #
+  #     A string that describes where the request happened. This is useful if,
+  #     for example, you want to log which server the request is from. Defaults
+  #     to the machine's hostname.
   #
   class JsonLogs
 
@@ -14,6 +28,7 @@ module Rack
       @options = {
         reraise_exceptions: false
       }.merge(options)
+      @options[:from] ||= Socket.gethostname
     end
 
     def call(env)
@@ -31,6 +46,7 @@ module Rack
 
       log = {
         request: "#{env['REQUEST_METHOD']} #{env['PATH_INFO']}",
+        from: @options[:from],
         stdout: stdout_buffer.string,
         stderr: stderr_buffer.string
       }
