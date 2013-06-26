@@ -22,6 +22,7 @@ while line = STDIN.gets
     out.puts
     out.puts "Request: #{json['request']}".cyan
     out.puts "From: #{json['from']}".cyan if json['from']
+    out.puts "At: #{Time.at(json['time']).strftime('%b %-e %Y, %-l:%M%P')}"
     out.puts
     
     %w{stdout stderr}.each do |b|

@@ -45,6 +45,7 @@ module Rack
       $stferr = previous_stderr; $stdout = previous_stdout
 
       log = {
+        time: Time.now.to_i,
         request: "#{env['REQUEST_METHOD']} #{env['PATH_INFO']}",
         from: @options[:from],
         stdout: stdout_buffer.string,
