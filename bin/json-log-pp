@@ -17,7 +17,7 @@ while line = STDIN.gets
 
   json = json['data'] if json && json['data']
 
-  if json && json['request']
+  if json && json.is_a?(Hash) && json['request']
 
     out = StringIO.new
 
