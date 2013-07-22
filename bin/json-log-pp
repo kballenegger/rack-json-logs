@@ -15,6 +15,8 @@ while line = STDIN.gets
 
   json = JSON.parse(line) rescue nil
 
+  json = json['data'] if json && json['data']
+
   if json && json['request']
 
     out = StringIO.new
