@@ -93,7 +93,7 @@ Using Rack::JsonLogs is easy, all you need to do is add it to your middleware
 stack:
 
 ```ruby
-use Rack::JsonLogger
+use Rack::JsonLogs
 ```
 
 ## Contributing
