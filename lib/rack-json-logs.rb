@@ -42,7 +42,7 @@ module Rack
       end
 
       # restore output IOs
-      $stferr = previous_stderr; $stdout = previous_stdout
+      $stderr = previous_stderr; $stdout = previous_stdout
 
       log = {
         time: Time.now.to_i,
