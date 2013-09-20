@@ -47,6 +47,7 @@ module Rack
       log = {
         time: Time.now.to_i,
         request: "#{env['REQUEST_METHOD']} #{env['PATH_INFO']}",
+        status: (response || [500]).first,
         from: @options[:from],
         stdout: stdout_buffer.string,
         stderr: stderr_buffer.string
