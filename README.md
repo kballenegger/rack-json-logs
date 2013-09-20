@@ -96,6 +96,35 @@ stack:
 use Rack::JsonLogs
 ```
 
+Using the command line tool is also easy. Output can be configured, see:
+
+    $ json-log-pp -h    
+    Options:
+                       --stdout, -o:   Print stdout.
+                       --stderr, -e:   Print stderr.
+              --from, --no-from, -f:   Print from. (Default: true)
+                        --trace, -b:   Print full backtraces.
+      --duration, --no-duration, -d:   Print request duration. (Default: true)
+                       --events, -v:   Print events.
+                         --help, -h:   Show this message
+
+
+## Changelog
+
+#### 1.0
+
+Production release. Deployed and used in a large-scale system.
+
+- Big feature: Event logging.
+- `json-log-pp` output can be configured with CLI options.
+- Log request duration.
+- Logs status codes.
+- Bug fixes.
+
+#### 0.0.1
+
+Initial release.
+
 ## Contributing
 
 1. Fork it
