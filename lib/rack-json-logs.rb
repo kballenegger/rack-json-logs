@@ -36,6 +36,9 @@ module Rack
       $stdout, previous_stdout = (stdout_buffer = StringIO.new), $stdout
       $stderr, previous_stderr = (stderr_buffer = StringIO.new), $stderr
 
+      logger = EventLogger.new(start_time)
+      env = env.dup; env[:logger] = logger
+
       begin
         response = @app.call(env)
       rescue Exception => e
@@ -54,6 +57,7 @@ module Rack
         stdout: stdout_buffer.string,
         stderr: stderr_buffer.string
       }
+      log[:events] =  logger.events if logger.used
       if exception
         log[:exception] = {
           message: exception.message,
@@ -72,9 +76,27 @@ module Rack
     end
 
 
-    # This class can be used to log arbitrary events to the request
+    # This class can be used to log arbitrary events to the request.
+    #
     class EventLogger
+      attr_reader :events, :used
 
+      def initialize(start_time)
+        @start_time = start_time
+        @events = []
+        @used = false
+      end
+
+      # Log an event of type `event` and value `value`.
+      #
+      def log(event, value)
+        @used = true
+        @events << {
+          event: event,
+          value: value,
+          time: (Time.now - @start_time).round(3)
+        }
+      end
     end
   end
 end

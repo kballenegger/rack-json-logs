@@ -11,6 +11,7 @@ opts = Trollop.options do
   opt :from, 'Print from.', default: true, short: 'f'
   opt :trace, 'Print full backtraces.', default: false, short: 'b'
   opt :duration, 'Print request duration.', default: true, short: 'd'
+  opt :events, 'Print events.', default: false, short: 'v'
 end
 
 STDOUT.sync = true
@@ -59,6 +60,17 @@ while line = STDIN.gets
         out.puts log.send(color)
       end
       # Typically log statements start end with a \n, so skiping puts here.
+    end
+
+    if opts[:events] && json['events'] && !json['events'].empty?
+      out.puts 'Events:'.cyan
+      out.puts
+      json['events'].each do |e|
+        out.puts "Event: #{e['event']}"
+        out.puts "At: #{(e['time']*1000).round}ms"
+        out.puts "Value: #{e['value'].to_json}"
+        out.puts
+      end
     end
 
     if json['exception']
