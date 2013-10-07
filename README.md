@@ -9,9 +9,19 @@ be a single line, for easier processig through tools like `grep`):
 ```json
 {
    "request": "GET /hello",
+   "status": 500,
+   "time": 1379703636,
+   "duration": 0.05,
    "from": "server-1",
    "stdout": "This contains the STDOUT\nLines are separated by \\n",
    "stderr": "This contains the STDERR\nLines are separated by \\n",
+   "events": [
+      {
+         "type": "event",
+         "value": "something awesome happened",
+         "time": 0.3
+      }
+   ],
    "exception": {
       "message": "Throwing an exception on purpose.",
       "backtrace": [
@@ -95,6 +105,35 @@ stack:
 ```ruby
 use Rack::JsonLogs
 ```
+
+Using the command line tool is also easy. Output can be configured, see:
+
+    $ json-log-pp -h    
+    Options:
+                       --stdout, -o:   Print stdout.
+                       --stderr, -e:   Print stderr.
+              --from, --no-from, -f:   Print from. (Default: true)
+                        --trace, -b:   Print full backtraces.
+      --duration, --no-duration, -d:   Print request duration. (Default: true)
+                       --events, -v:   Print events.
+                         --help, -h:   Show this message
+
+
+## Changelog
+
+#### 1.0
+
+Production release. Deployed and used in a large-scale system.
+
+- Big feature: Event logging.
+- `json-log-pp` output can be configured with CLI options.
+- Log request duration.
+- Logs status codes.
+- Bug fixes.
+
+#### 0.0.1
+
+Initial release.
 
 ## Contributing
 

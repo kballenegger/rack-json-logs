@@ -3,6 +3,16 @@
 require 'json'
 require 'colorize'
 require 'stringio'
+require 'trollop'
+
+opts = Trollop.options do
+  opt :stdout, 'Print stdout.', default: false, short: 'o'
+  opt :stderr, 'Print stderr.', default: false, short: 'e'
+  opt :from, 'Print from.', default: true, short: 'f'
+  opt :trace, 'Print full backtraces.', default: false, short: 'b'
+  opt :duration, 'Print request duration.', default: true, short: 'd'
+  opt :events, 'Print events.', default: false, short: 'v'
+end
 
 STDOUT.sync = true
 
@@ -21,13 +31,26 @@ while line = STDIN.gets
 
     out = StringIO.new
 
+    status_color = case json['status']
+                   when 200...300; :green
+                   when 300...600; :red
+                   else :cyan; end
+
+
+    resp = 'Response: '
+    resp << "#{json['status']} " if json['status']
+    resp << "(#{(json['duration']*1000).round}ms) " if opts[:duration] && json['duration']
+
+    out.puts '     * * *'
     out.puts
     out.puts "Request: #{json['request']}".cyan
-    out.puts "From: #{json['from']}".cyan if json['from']
+    out.puts resp.send(status_color)
+    out.puts "From: #{json['from']}".cyan if opts[:from] && json['from']
     out.puts "At: #{Time.at(json['time']).strftime('%b %-e %Y, %-l:%M%P')}"
     out.puts
     
     %w{stdout stderr}.each do |b|
+      next unless opts[b.to_sym]
       color = b == 'stdout' ? :green : :yellow
       log = json[b] || ''
       if log == '' || log == "\n"
@@ -39,9 +62,20 @@ while line = STDIN.gets
       # Typically log statements start end with a \n, so skiping puts here.
     end
 
+    if opts[:events] && json['events'] && !json['events'].empty?
+      out.puts 'Events:'.cyan
+      out.puts
+      json['events'].each do |e|
+        out.puts "Event: #{e['event']}"
+        out.puts "At: #{(e['time']*1000).round}ms"
+        out.puts "Value: #{e['value'].to_json}"
+        out.puts
+      end
+    end
+
     if json['exception']
       out.puts "Exception: #{json['exception']['message']}".red
-      out.puts json['exception']['backtrace'].map {|e| "  #{e}"}.join("\n").blue
+      out.puts json['exception']['backtrace'].map {|e| "  #{e}"}.join("\n").blue if opts[:trace]
       out.puts
     end
 

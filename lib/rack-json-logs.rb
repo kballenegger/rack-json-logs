@@ -32,8 +32,12 @@ module Rack
     end
 
     def call(env)
+      start_time = Time.now
       $stdout, previous_stdout = (stdout_buffer = StringIO.new), $stdout
       $stderr, previous_stderr = (stderr_buffer = StringIO.new), $stderr
+
+      logger = EventLogger.new(start_time)
+      env = env.dup; env[:logger] = logger
 
       begin
         response = @app.call(env)
@@ -45,12 +49,15 @@ module Rack
       $stderr = previous_stderr; $stdout = previous_stdout
 
       log = {
-        time: Time.now.to_i,
+        time: start_time.to_i,
+        duration: (Time.now - start_time).round(3),
         request: "#{env['REQUEST_METHOD']} #{env['PATH_INFO']}",
+        status: (response || [500]).first,
         from: @options[:from],
         stdout: stdout_buffer.string,
         stderr: stderr_buffer.string
       }
+      log[:events] =  logger.events if logger.used
       if exception
         log[:exception] = {
           message: exception.message,
@@ -66,6 +73,30 @@ module Rack
 
     def response_500
       [500, {'Content-Type' => 'application/json'}, [{status: 500, message: 'Something went wrong...'}.to_json]]
+    end
+
+
+    # This class can be used to log arbitrary events to the request.
+    #
+    class EventLogger
+      attr_reader :events, :used
+
+      def initialize(start_time)
+        @start_time = start_time
+        @events = []
+        @used = false
+      end
+
+      # Log an event of type `event` and value `value`.
+      #
+      def log(event, value)
+        @used = true
+        @events << {
+          event: event,
+          value: value,
+          time: (Time.now - @start_time).round(3)
+        }
+      end
     end
   end
 end
