@@ -9,9 +9,19 @@ be a single line, for easier processig through tools like `grep`):
 ```json
 {
    "request": "GET /hello",
+   "status": 500,
+   "time": 1379703636,
+   "duration": 0.05,
    "from": "server-1",
    "stdout": "This contains the STDOUT\nLines are separated by \\n",
    "stderr": "This contains the STDERR\nLines are separated by \\n",
+   "events": [
+      {
+         "type": "event",
+         "value": "something awesome happened",
+         "time": 0.3
+      }
+   ],
    "exception": {
       "message": "Throwing an exception on purpose.",
       "backtrace": [
