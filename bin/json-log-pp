@@ -66,7 +66,7 @@ while line = STDIN.gets
       out.puts 'Events:'.cyan
       out.puts
       json['events'].each do |e|
-        out.puts "Event: #{e['event']}"
+        out.puts "Event: #{e['type']}"
         out.puts "At: #{(e['time']*1000).round}ms"
         out.puts "Value: #{e['value'].to_json}"
         out.puts

@@ -87,12 +87,12 @@ module Rack
         @used = false
       end
 
-      # Log an event of type `event` and value `value`.
+      # Log an event of type `type` and value `value`.
       #
-      def log(event, value)
+      def log(type, value)
         @used = true
         @events << {
-          event: event,
+          type: type,
           value: value,
           time: (Time.now - @start_time).round(3)
         }
