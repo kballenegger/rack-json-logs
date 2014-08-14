@@ -121,6 +121,11 @@ Using the command line tool is also easy. Output can be configured, see:
 
 ## Changelog
 
+#### 1.1
+
+- New feature: can pretty print from middleware, for development usage.
+- Refactoring of binary pretty print code into library.
+
 #### 1.0
 
 Production release. Deployed and used in a large-scale system.
