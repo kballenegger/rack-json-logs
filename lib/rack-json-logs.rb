@@ -80,7 +80,8 @@ module Rack
       end
 
       if @options[:pretty_print]
-        JsonLogs.pretty_print(log, STDOUT, @options[:print_options])
+        JsonLogs.pretty_print(JSON.parse(log.to_json),
+                              STDOUT, @options[:print_options])
       else
         STDOUT.puts(log.to_json)
       end
