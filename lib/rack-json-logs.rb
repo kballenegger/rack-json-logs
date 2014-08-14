@@ -1,4 +1,5 @@
 require 'rack-json-logs/version'
+require 'rack-json-logs/pretty-printer.rb'
 require 'json'
 require 'stringio'
 require 'socket'
@@ -21,13 +22,26 @@ module Rack
   #     for example, you want to log which server the request is from. Defaults
   #     to the machine's hostname.
   #
+  #   :pretty_print
+  #
+  #     When set to true, this will pretty-print the logs, instead of printing
+  #     the json. This is useful in development.
+  #
+  #   :print_options
+  #
+  #     When :pretty_print is set to true, these options will be passed to the
+  #     pretty-printer. Run `json-logs-pp -h` to see what the options are.
+  #
   class JsonLogs
 
     def initialize(app, options={})
       @app = app
       @options = {
-        reraise_exceptions: false
+        reraise_exceptions: false,
+        pretty_print: false,
+        print_options: {},
       }.merge(options)
+      p @options
       @options[:from] ||= Socket.gethostname
     end
 
@@ -64,7 +78,12 @@ module Rack
           backtrace: exception.backtrace
         }
       end
-      STDOUT.puts(log.to_json)
+
+      if @options[:pretty_print]
+        JsonLogs.pretty_print(log, STDOUT, @options[:print_options])
+      else
+        STDOUT.puts(log.to_json)
+      end
 
       raise exception if exception && @options[:reraise_exceptions]
 

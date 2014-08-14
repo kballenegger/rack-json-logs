@@ -4,7 +4,7 @@
 $: << File.expand_path('../lib/', __FILE__)
 require 'rack-json-logs'
 
-use Rack::JsonLogs
+use Rack::JsonLogs, pretty_print: true
 
 run ->(env) do
   puts "hello world"
