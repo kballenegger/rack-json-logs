@@ -39,9 +39,8 @@ module Rack
       @options = {
         reraise_exceptions: false,
         pretty_print: false,
-        print_options: {},
+        print_options: {trace: true},
       }.merge(options)
-      p @options
       @options[:from] ||= Socket.gethostname
     end
 
