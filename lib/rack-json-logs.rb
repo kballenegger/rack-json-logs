@@ -38,8 +38,8 @@ module Rack
       @app = app
       @options = {
         reraise_exceptions: false,
-        pretty_print: false,
-        print_options: {trace: true},
+        pretty_print:       false,
+        print_options:      {trace: true},
       }.merge(options)
       @options[:from] ||= Socket.gethostname
     end
@@ -62,18 +62,18 @@ module Rack
       $stderr = previous_stderr; $stdout = previous_stdout
 
       log = {
-        time: start_time.to_i,
+        time:     start_time.to_i,
         duration: (Time.now - start_time).round(3),
-        request: "#{env['REQUEST_METHOD']} #{env['PATH_INFO']}",
-        status: (response || [500]).first,
-        from: @options[:from],
-        stdout: stdout_buffer.string,
-        stderr: stderr_buffer.string
+        request:  "#{env['REQUEST_METHOD']} #{env['PATH_INFO']}",
+        status:   (response || [500]).first,
+        from:     @options[:from],
+        stdout:   stdout_buffer.string,
+        stderr:   stderr_buffer.string
       }
       log[:events] =  logger.events if logger.used
       if exception
         log[:exception] = {
-          message: exception.message,
+          message:   exception.message,
           backtrace: exception.backtrace
         }
       end
@@ -91,7 +91,8 @@ module Rack
     end
 
     def response_500
-      [500, {'Content-Type' => 'application/json'}, [{status: 500, message: 'Something went wrong...'}.to_json]]
+      [500, {'Content-Type' => 'application/json'},
+       [{status: 500, message: 'Something went wrong...'}.to_json]]
     end
 
 
@@ -102,8 +103,8 @@ module Rack
 
       def initialize(start_time)
         @start_time = start_time
-        @events = []
-        @used = false
+        @events     = []
+        @used       = false
       end
 
       # Log an event of type `type` and value `value`.
@@ -111,9 +112,9 @@ module Rack
       def log(type, value)
         @used = true
         @events << {
-          type: type,
+          type:  type,
           value: value,
-          time: (Time.now - @start_time).round(3)
+          time:  (Time.now - @start_time).round(3)
         }
       end
     end

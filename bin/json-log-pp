@@ -5,12 +5,12 @@ require 'trollop'
 require File.expand_path('../../lib/rack-json-logs/pretty-printer.rb', __FILE__)
 
 opts = Trollop.options do
-  opt :stdout, 'Print stdout.', default: false, short: 'o'
-  opt :stderr, 'Print stderr.', default: false, short: 'e'
-  opt :from, 'Print from.', default: true, short: 'f'
-  opt :trace, 'Print full backtraces.', default: false, short: 'b'
-  opt :duration, 'Print request duration.', default: true, short: 'd'
-  opt :events, 'Print events.', default: false, short: 'v'
+  opt :stdout,   'Print stdout.',           default: false, short: 'o'
+  opt :stderr,   'Print stderr.',           default: false, short: 'e'
+  opt :from,     'Print from.',             default: true,  short: 'f'
+  opt :trace,    'Print full backtraces.',  default: false, short: 'b'
+  opt :duration, 'Print request duration.', default: true,  short: 'd'
+  opt :events,   'Print events.',           default: false, short: 'v'
 end
 
 STDOUT.sync = true

@@ -7,12 +7,12 @@ module Rack
     def self.pretty_print(json, print_to = STDOUT, opts = {})
 
       opts = {
-        stdout: false,
-        stderr: false,
-        from: true,
-        trace: false,
+        stdout:   false,
+        stderr:   false,
+        from:     true,
+        trace:    false,
         duration: true,
-        events: false,
+        events:   false,
       }.merge(opts)
 
       out = StringIO.new
@@ -70,7 +70,6 @@ module Rack
       end
 
       print_to.print(out.string)
-
 
     end
   end
