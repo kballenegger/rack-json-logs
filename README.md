@@ -4,7 +4,7 @@ Rack::JsonLogs is a gem that helps log sanely in production.
 
 Ever request will log a JSON object to the real *stdout*, containing the
 following (note: whitespace added here for clarity, in production it would only
-be a single line, for easier processig through tools like `grep`):
+be a single line, for easier processing through tools like `grep`):
 
 ```json
 {
