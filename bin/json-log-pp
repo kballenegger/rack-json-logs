@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
 require 'json'
-require 'trollop'
+require 'optimist'
 require File.expand_path('../../lib/rack-json-logs/pretty-printer.rb', __FILE__)
 
-opts = Trollop.options do
+opts = Optimist.options do
   opt :stdout,   'Print stdout.',           default: false, short: 'o'
   opt :stderr,   'Print stderr.',           default: false, short: 'e'
   opt :from,     'Print from.',             default: true,  short: 'f'
