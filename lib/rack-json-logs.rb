@@ -63,7 +63,7 @@ module Rack
 
       log = {
         time:     start_time.to_i,
-        duration: (Time.now - start_time).round(3),
+        duration: (Time.now - start_time),
         request:  "#{env['REQUEST_METHOD']} #{env['PATH_INFO']}",
         status:   (response || [500]).first,
         from:     @options[:from],
@@ -114,7 +114,7 @@ module Rack
         @events << {
           type:  type,
           value: value,
-          time:  (Time.now - @start_time).round(3)
+          time:  (Time.now - @start_time)
         }
       end
     end
