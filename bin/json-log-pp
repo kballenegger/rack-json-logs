@@ -22,7 +22,9 @@ end
 while line = STDIN.gets
   break if line == nil
 
-  json = JSON.parse(line) rescue nil
+  line_without_prefix = line.sub /^(.+)\sweb\s/, ''
+
+  json = JSON.parse(line_without_prefix) rescue nil
 
   json = json['data'] if json && json['data']
 
